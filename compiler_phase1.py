@@ -5,7 +5,7 @@ tokens = (
     'LETTER',
     'SEMI_COLON',
     'COLON',
-    'COMMA'
+    'COMMA',
     'OPEN_BRACKETS',
     'CLOSE_BRACKETS',
     'OPEN_PARANTHESES',
@@ -32,7 +32,7 @@ tokens = (
     'EQ',
     'INC_VAL',
     'DEC_VAL',
-    'MULTIPY_VAL',
+    'TIMES_VAL',
     'DIVIDE_VAL',
     'THEN_KW',
     'ELSE_KW',
@@ -44,7 +44,7 @@ tokens = (
     'NOT_EQ',
     'PLUS',
     'MINUS',
-    'MULTIPLE',
+    'TIMES',
     'DIVIDE',
     'QM',
     'DOT',
@@ -58,26 +58,87 @@ tokens = (
     'OR_KW',
  )
 
- # Regular expression rules for simple tokens
+reserved = {
+    'static': 'STATIC_KW',
+    'character': 'CHARACTER_KW',
+    'char': 'CHAR_KW',
+    'integer': 'INTEGER_KW',
+    'int': 'INT_KW',
+    'boolean': 'BOOLEAN_KW',
+    'bool': 'BOOL_KW',
+    'void': 'VOID_KW',
+    'IF_KW': 'if' ,
+    'other': 'OTHER_KW',
+    'till': 'TILL_KW',
+    'comeback': 'COMEBACK_KW',
+    'giveback': 'GIVEBACK_KW',
+    'continue': 'CONTINUE_KW',
+    'then': 'THEN_KW',
+    'else': 'ELSE_KW',
+    'const': 'CONST_KW',
+    'true': 'TRUE_KW',
+    'false': 'FALSE_KW',
+    'and': 'AND_KW',
+    'or': 'OR_KW',
+}
+
+
+t_SEMI_COLON = r';'
+t_COLON = r':'
+t_COMMA = r','
+t_OPEN_BRACKETS = r'\['
+t_CLOSE_BRACKETS = r'\]'
+t_OPEN_BRACES = r'\{'
+t_CLOSE_BRACES = r'\}'
+t_OPEN_PARANTHESES = r'\('
+t_CLOSE_PARANTHESES = r'\)'
+
 t_PLUS    = r'\+'
 t_MINUS   = r'-'
 t_TIMES   = r'\*'
 t_DIVIDE  = r'/'
-t_LPAREN  = r'\('
-t_RPAREN  = r'\)'
- 
+
+t_LT_EQ = r'<='
+t_GT_EQ = r'>='
+t_LT = r'<'
+t_GT = r'>'
+t_IS_EQ = r'=='
+t_NOT_EQ = r'!='
+t_EQ = r'='
+
+t_INC_VAL = r'\+='
+t_DEC_VAL = r'-='
+t_TIMES_VAL = r'\*='
+t_DIVIDE_VAL = r'/='
+
+t_PLUS_PLUS = r'\+\+'
+t_MINUS_MINUS = r'--'
+
+t_QM = r'\?'
+t_DOT = r'\.'
+
+t_OR_OR = r'\|\|'
+t_AND_AND = r'\&\&'
+t_NOT = r'~'
+
+
  # A regular expression rule with some action code
 def t_NUMBER(t):
      r'\d+'
      t.value = int(t.value)    
      return t
+
+def t_LETTER(t):
+    r'[A-Za-z]+'
+    t.type = reserved.get(t.value,'LETTER')
+    return t
  
  # Define a rule so we can track line numbers
 def t_newline(t):
      r'\n+'
      t.lexer.lineno += len(t.value)
  
- # A string containing ignored characters (spaces and tabs)
+#t_SPACE = r' '
 t_ignore  = ' \t'
  
  # Error handling rule
@@ -89,8 +150,7 @@ def t_error(t):
 lexer = lex.lex()
   # Test it out
 data = '''
- 3 + 4 * 10
-   + -20 *2
+    if(3 + 5 > 2) then true else false;
  '''
  
  # Give the lexer some input
