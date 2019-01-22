@@ -1,5 +1,10 @@
 import ply.lex as lex
 
+input_lex = "input3.txt"
+
+with open(input_lex, 'r') as f:
+    data = f.read()
+
 tokens = (
     'NUMBER',
     'LETTER',
@@ -67,7 +72,7 @@ reserved = {
     'boolean': 'BOOLEAN_KW',
     'bool': 'BOOL_KW',
     'void': 'VOID_KW',
-    'IF_KW': 'if' ,
+    'IF_KW': 'if',
     'other': 'OTHER_KW',
     'till': 'TILL_KW',
     'comeback': 'COMEBACK_KW',
@@ -149,9 +154,6 @@ def t_error(t):
  # Build the lexer
 lexer = lex.lex()
   # Test it out
-data = '''
-    if(3 + 5 > 2) then true else false;
- '''
  
  # Give the lexer some input
 lexer.input(data)

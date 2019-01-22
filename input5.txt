@@ -1,0 +1,1 @@
+void abs(char a,b,c) {c = a + b}

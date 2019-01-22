@@ -1,0 +1,16 @@
+*baraye test kardan, tanha kafi ast esme fileha dar ebtedaye barnameye lex entekhab shavad.
+
+*barnameye yacc neveshte shode va tamamie rule ha va functionhaye marbut beheshan neveshte shode.
+hamchenin, az precedence ha baraye inke heyne parse be ebham bar nakhorim estefade shode.
+precedence = (
+    ('left', 'OR_KW', 'THEN_OR_KW'),
+    ('left', 'AND_KW', 'THEN_AND_KW'),
+    ('left', 'EQ'),
+    ('left', 'LT', 'GT', 'LE', 'GE'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'MOD'),
+    ('left', 'MUL', 'DIV'),
+    ('right', 'NOT_KW', 'MINUSMINUS', 'PLUSPLUS'),
+    ('nonassoc', 'ELSE_KW')
+)
+ama motasefane natavanestan yacc ra build konam va dar natije pasokhi nemidahad barname.

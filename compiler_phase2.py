@@ -1,8 +1,13 @@
 import ply.lex as lex
 import ply.yacc as yacc
-import pickle
+from compiler_phase1 import tokens
 
- 
+
+def logger(p, log):
+    print(log, [str(x).replace('\\n', '') for x in p], sep='\t')
+
+
+
 def p_num(p):
 	 'num : NUM'
 	 # logger(p, 'Rule1: num -> NUM')
@@ -23,7 +28,7 @@ def p_numOrLetter2(p):
 	 'numOrletter : letter'
 	 logger(p, 'Rule3.2: numOrletter -> letter')
 
-def p_numOrLetter2(p):
+def p_numOrLetter3(p):
 	 'numOrletter : empty'
 	 logger(p, 'Rule3.3: numOrletter -> 𝜀')
 
@@ -452,39 +457,53 @@ def p_constant1(p):
 	logger(p, 'Rule46.1: constant -> CONST')
 
 def p_constant2(p):
-	'constant: TRUE_KW'
+	'constant : TRUE_KW'
 	logger(p, 'Rule46.2: constant -> TRUE')
 
 def p_constant3(p):
-	'constant: FALSE_KW'
+	'constant : FALSE_KW'
 	logger(p, 'Rule46.3: constant -> FALSE')
 
 def p_logicOp1(p):
-	'logicOp: AND_AND'
+	'logicOp : AND_AND'
 	logger(p, 'Rule47.1: constant -> &&')
 
 def p_logicOp2(p):
-	'logicOp: OR_OR'
+	'logicOp : OR_OR'
 	logger(p, 'Rule47.2: constant -> ||')
 
 def p_logicOp3(p):
-	'logicOp: NOT'
+	'logicOp : NOT'
 	logger(p, 'Rule47.3: constant -> ~')
 
 def p_logicOp4(p):
-	'logicOp: AND_KW'
+	'logicOp : AND_KW'
 	logger(p, 'Rule47.4: constant -> and')
 
 def p_logicOp5(p):
-	'logicOp: OR_KW'
+	'logicOp : OR_KW'
 	logger(p, 'Rule47.5: constant -> or')
+
+precedence = (
+    ('left', 'OR_KW', 'THEN_OR_KW'),
+    ('left', 'AND_KW', 'THEN_AND_KW'),
+    ('left', 'EQ'),
+    ('left', 'LT', 'GT', 'LE', 'GE'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'MOD'),
+    ('left', 'MUL', 'DIV'),
+    ('right', 'NOT_KW', 'MINUSMINUS', 'PLUSPLUS'),
+    ('nonassoc', 'ELSE_KW')
+)
 
  # Error rule for syntax errors
 def p_error(p):
 	 print("Syntax error in input!")
- 
+
+
  # Build the parser
-#parser = yacc.yacc()
+parser = yacc.yacc()
+parser.parse()
  
 # while True:
 # 	try:
